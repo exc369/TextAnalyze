@@ -1,0 +1,91 @@
+import java.io.FileReader;
+import java.io.BufferedReader;
+import java.io.*;
+import java.util.*;
+import java.lang.*;
+
+public class TextAnalyze {
+  
+  public static int radixSort(LinkedList<WordCount> list) {
+    ArrayList<WordCount> listOfWords = new ArrayList<WordCount>(27);
+    LLNode<WordCount> nodepointer = list.getFront();
+    int maxLength = 0;
+    while (nodepointer != null){
+      WordCount wc = new WordCount(nodepointer.getNext().getElement().getWord());
+      if(wc.getWord().length() > maxLength){
+        maxLength = wc.getWord().length() - 1;
+      }
+    }
+    
+    return maxLength;
+  }
+  
+  public static boolean onlyEnglishLetters(String a) {
+    // I needed to go through each character of my string input to see if they were english letters
+    for (int index = 0; index < a.length(); index++) {
+      // If the character at the index is not an english letter, return false
+      if ( Character.isDigit(a.charAt(index)) || !Character.isLetter(a.charAt(index))) {
+        return false;
+      }
+    }
+    // Else return true
+    return true;
+  }
+  
+  public static LinkedList<WordCount> loadFile(String fileName) throws FileNotFoundException {
+    LinkedList<WordCount> list = new LinkedList<WordCount>();
+    Scanner scanner = new Scanner(new File(fileName));
+    while(scanner.hasNext()){
+      String word = scanner.next();
+      //removes any punctuation from the string
+      word = word.replaceAll("\\p{Punct}","");
+      //if statement checks to make sure all letters are english letters in the word before it appends the word to the list
+      if (onlyEnglishLetters(word)) {
+        list.addToBack(new WordCount(word));
+        }
+      }
+    scanner.close();
+    return list;
+  }
+  
+  public static void writeData(String saveFile, LinkedList<WordCount> results) throws IOException {
+    File file = new File(saveFile);
+    if (file.exists()) {
+      throw new IOException("File already exists. Cannot overwrite.");
+    }
+    FileWriter writer = new FileWriter(file, true);
+    
+    int count = results.length();
+    
+    double totalCount = 0;
+    
+    LLNode<WordCount> nodepointer = results.getFront();
+    
+    while (nodepointer != null) {
+      int increment = 1;
+      LLNode<WordCount> nodepointer2 = nodepointer;
+      WordCount wc = nodepointer2.getElement();
+       while (nodepointer2 != null) {
+        if (wc.getWord() == nodepointer2.getNext().getElement().getWord()){
+          increment++;
+          wc.setCount(increment);
+        }
+      }
+      totalCount += wc.getCount();
+      nodepointer = nodepointer.getNext();
+    }
+    
+    LLNode<WordCount> nodeptr = results.getFront();
+    while (nodeptr != null) {
+      WordCount wc = nodeptr.getElement();
+      
+      String percent = String.format("%.2f", ((wc.getCount() / totalCount) * 100)) + "%";
+      String line = wc.getWord() + " " + wc.getCount() + " " + percent + "\n";
+      System.out.println(wc.getWord());
+      writer.write(line);
+      nodeptr = nodeptr.getNext();
+    }
+    writer.close();
+  }
+  
+}

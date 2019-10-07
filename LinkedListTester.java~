@@ -1,0 +1,79 @@
+import org.junit.*;
+import static org.junit.Assert.*;
+
+/**
+ * Test classes LinkedList and LLNode
+ */
+public class LinkedListTester {
+  
+  /**
+   * Test the insertAfter method
+   */
+  @Test
+  public void testAppend() {
+    LinkedList<Integer> list = new LinkedList<Integer>();
+    list.addToFront(1);
+    list.addToFront(2);
+    list.addToFront(3);
+    LinkedList<Integer> list2 = new LinkedList<Integer>();
+    list2.addToFront(5);
+    list2.addToFront(6);
+    list2.addToFront(7);
+    list.append(list2);
+    assertEquals("list: 3 2 1 7 6 5", list.toString());
+  }
+  
+  /**
+   * Test the WordCount class
+   */
+  @Test
+  public void testWordCount() {
+    WordCount a = new WordCount("hello");
+    assertEquals("hello", a.getWord());
+    assertEquals(1, a.getCount());
+    a.setCount(2);
+    assertEquals(2, a.getCount());
+    assertEquals(4, a.getLast());
+    a.setWord("helllllloo");
+    assertEquals("helllllloo", a.getWord());
+    assertEquals(10, a.getWord().length());
+  }
+  
+  
+  
+  /**
+   * Test the radixSort method
+   */
+  @Test
+  public void testRadixSort() {
+    LinkedList<WordCount> a = new LinkedList<WordCount>();
+    a.addToFront(new WordCount("cat"));
+    a.addToFront(new WordCount("bit"));
+    a.addToFront(new WordCount("cop"));
+    a.addToFront(new WordCount("cap"));
+    a.addToFront(new WordCount("be"));
+    a.addToFront(new WordCount("car"));    
+    a.addToFront(new WordCount("dart"));    
+    a.addToFront(new WordCount("bat"));   
+    a.addToFront(new WordCount("cart"));    
+    assertEquals("bat", TextAnalyze.radixSort(a).getFirst().getElement().getWord());
+    assertEquals("be", TextAnalyze.radixSort(a).getFirst().getNext().getElement().getWord());
+    assertEquals("bit", TextAnalyze.radixSort(a).getFirst().getNext().getNext().getElement().getWord());
+    assertEquals("cap", TextAnalyze.radixSort(a).getFirst().getNext().getNext().getNext().getElement().getWord());
+    assertEquals("car", TextAnalyze.radixSort(a).getFirst().getNext().getNext().getNext().getNext().getElement().getWord());
+  } 
+  
+  /**
+   * Test the toString Method
+   */
+  @Test
+  public void testToString() {
+    LinkedList<String> a = new LinkedList<String>();
+    a.addToFront("hello");
+    assertEquals("list: hello", a.toString());
+    a.addToFront("hellllloo");
+    assertEquals("list: hellllloo hello", a.toString());
+    a.addToFront("ILoveThisProject");
+    assertEquals("list: ILoveThisProject hellllloo hello", a.toString());
+  }
+}
